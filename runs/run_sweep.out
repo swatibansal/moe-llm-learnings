@@ -1,0 +1,310 @@
+== phase: moe_e2_k1  (E=2, top-k=1)
+data: 5,057,279 chars, vocab 84, train 4,804,416 / val 252,863
+loaded runs/dense/ckpt.pkl @ step 2000  (dense)
+upcycled dense MLPs -> MoE with E=2, top-k=1
+params: total=1,357,056  active/token=830,208
+step  2000  val 1.6210   (initial, no updates yet)
+  expert load per layer (fraction of routing assignments):
+  0.38 0.62
+  0.54 0.46
+  0.37 0.63
+  0.60 0.40
+step  2100  train 1.5990  val 1.6154  aux 1.000  lr 2.99e-04  |g| 1.54      16s
+step  2200  train 1.5996  val 1.6105  aux 1.000  lr 2.93e-04  |g| 1.36      31s
+step  2300  train 1.5822  val 1.6126  aux 1.000  lr 2.81e-04  |g| 1.27      47s
+step  2400  train 1.5761  val 1.6089  aux 1.000  lr 2.63e-04  |g| 1.29      63s
+step  2500  train 1.5701  val 1.5909  aux 1.000  lr 2.41e-04  |g| 1.31      78s
+  expert load per layer:
+  0.46 0.54
+  0.52 0.48
+  0.46 0.54
+  0.53 0.47
+step  2600  train 1.5494  val 1.5893  aux 1.000  lr 2.15e-04  |g| 1.34      94s
+step  2700  train 1.5452  val 1.5858  aux 1.000  lr 1.87e-04  |g| 1.59     109s
+step  2800  train 1.5166  val 1.5676  aux 1.000  lr 1.58e-04  |g| 1.31     125s
+step  2900  train 1.5172  val 1.5654  aux 1.000  lr 1.29e-04  |g| 1.50     140s
+step  3000  train 1.5153  val 1.5577  aux 1.000  lr 1.02e-04  |g| 1.38     156s
+  expert load per layer:
+  0.54 0.46
+  0.44 0.56
+  0.56 0.44
+  0.56 0.44
+step  3100  train 1.4961  val 1.5496  aux 1.000  lr 7.78e-05  |g| 1.28     171s
+step  3200  train 1.4881  val 1.5432  aux 1.000  lr 5.77e-05  |g| 1.30     186s
+step  3300  train 1.4861  val 1.5410  aux 1.000  lr 4.26e-05  |g| 1.32     201s
+step  3400  train 1.4860  val 1.5386  aux 1.000  lr 3.32e-05  |g| 1.39     216s
+step  3500  train 1.4717  val 1.5353  aux 1.000  lr 3.00e-05  |g| 1.25     231s
+  expert load per layer:
+  0.51 0.49
+  0.50 0.50
+  0.50 0.50
+  0.52 0.48
+
+--- sample ---
+ROMEO:
+
+                                                          
+
+VI.
+
+
+SCENE I.
+
+Now.
+
+Exter I very honer.
+
+SCENE II.
+
+LOGEN.
+We was! how now I am seal in the hand.
+
+[Exit Welling Indeed.]
+
+HORTENSIO.
+I were through his well knock, and self you, now bears,
+may too maid of her service hearts.
+
+[Exit CORA
+--------------
+== phase: moe_e2_k2  (E=2, top-k=2)
+data: 5,057,279 chars, vocab 84, train 4,804,416 / val 252,863
+loaded runs/dense/ckpt.pkl @ step 2000  (dense)
+upcycled dense MLPs -> MoE with E=2, top-k=2
+params: total=1,357,056  active/token=1,357,056
+step  2000  val 1.6210   (initial, no updates yet)
+  expert load per layer (fraction of routing assignments):
+  0.50 0.50
+  0.50 0.50
+  0.50 0.50
+  0.50 0.50
+step  2100  train 1.5913  val 1.6125  aux 1.000  lr 2.99e-04  |g| 1.30      15s
+step  2200  train 1.5941  val 1.6062  aux 1.000  lr 2.93e-04  |g| 1.31      30s
+step  2300  train 1.5751  val 1.6083  aux 1.000  lr 2.81e-04  |g| 1.16      45s
+step  2400  train 1.5714  val 1.6003  aux 1.000  lr 2.63e-04  |g| 1.23      60s
+step  2500  train 1.5659  val 1.5849  aux 1.000  lr 2.41e-04  |g| 1.22      75s
+  expert load per layer:
+  0.50 0.50
+  0.50 0.50
+  0.50 0.50
+  0.50 0.50
+step  2600  train 1.5473  val 1.5856  aux 1.000  lr 2.15e-04  |g| 1.17      90s
+step  2700  train 1.5423  val 1.5829  aux 1.000  lr 1.87e-04  |g| 1.23     105s
+step  2800  train 1.5138  val 1.5607  aux 1.000  lr 1.58e-04  |g| 1.25     120s
+step  2900  train 1.5127  val 1.5579  aux 1.000  lr 1.29e-04  |g| 1.24     135s
+step  3000  train 1.5117  val 1.5502  aux 1.000  lr 1.02e-04  |g| 1.23     150s
+  expert load per layer:
+  0.50 0.50
+  0.50 0.50
+  0.50 0.50
+  0.50 0.50
+step  3100  train 1.4929  val 1.5439  aux 1.000  lr 7.78e-05  |g| 1.18     165s
+step  3200  train 1.4861  val 1.5382  aux 1.000  lr 5.77e-05  |g| 1.25     180s
+step  3300  train 1.4834  val 1.5369  aux 1.000  lr 4.26e-05  |g| 1.18     195s
+step  3400  train 1.4834  val 1.5331  aux 1.000  lr 3.32e-05  |g| 1.31     209s
+step  3500  train 1.4709  val 1.5306  aux 1.000  lr 3.00e-05  |g| 1.21     224s
+  expert load per layer:
+  0.50 0.50
+  0.50 0.50
+  0.50 0.50
+  0.50 0.50
+
+--- sample ---
+ROMEO:
+
+
+SCENE VII. 
+
+DRoom. 
+
+[Reg. Enter OFFIQUY.
+
+Conscyt. I wort I may be semmbass'd;
+  It did you have play thee thring-far seal
+
+Speak the wind shake and done to where no more
+Wenteds to the night in the world hard, and And all and the man.
+
+BERONE.
+I practed fortune me that I."
+
+BRTICKM.
+Be liege th
+--------------
+== phase: moe_e4_k1  (E=4, top-k=1)
+data: 5,057,279 chars, vocab 84, train 4,804,416 / val 252,863
+loaded runs/dense/ckpt.pkl @ step 2000  (dense)
+upcycled dense MLPs -> MoE with E=4, top-k=1
+params: total=2,411,776  active/token=831,232
+step  2000  val 1.6210   (initial, no updates yet)
+  expert load per layer (fraction of routing assignments):
+  0.02 0.13 0.05 0.80
+  0.29 0.04 0.46 0.21
+  0.20 0.19 0.06 0.55
+  0.18 0.34 0.38 0.10
+step  2100  train 1.6094  val 1.6265  aux 1.000  lr 2.99e-04  |g| 1.61      31s
+step  2200  train 1.6131  val 1.6214  aux 1.000  lr 2.93e-04  |g| 1.35      62s
+step  2300  train 1.5905  val 1.6177  aux 1.000  lr 2.81e-04  |g| 1.27      92s
+step  2400  train 1.5874  val 1.6170  aux 1.000  lr 2.63e-04  |g| 1.25     123s
+step  2500  train 1.5826  val 1.6011  aux 1.000  lr 2.41e-04  |g| 1.23     154s
+  expert load per layer:
+  0.28 0.21 0.28 0.24
+  0.22 0.28 0.27 0.23
+  0.23 0.25 0.27 0.25
+  0.23 0.24 0.17 0.35
+step  2600  train 1.5575  val 1.5970  aux 1.000  lr 2.15e-04  |g| 1.28     184s
+step  2700  train 1.5549  val 1.5880  aux 1.000  lr 1.87e-04  |g| 1.39     215s
+step  2800  train 1.5236  val 1.5684  aux 1.000  lr 1.58e-04  |g| 1.26     245s
+step  2900  train 1.5195  val 1.5644  aux 1.000  lr 1.29e-04  |g| 1.31     276s
+step  3000  train 1.5183  val 1.5509  aux 1.000  lr 1.02e-04  |g| 1.20     307s
+  expert load per layer:
+  0.24 0.25 0.28 0.23
+  0.32 0.21 0.23 0.24
+  0.25 0.25 0.25 0.25
+  0.27 0.22 0.27 0.24
+step  3100  train 1.4969  val 1.5443  aux 1.000  lr 7.78e-05  |g| 1.17     337s
+step  3200  train 1.4904  val 1.5398  aux 1.000  lr 5.77e-05  |g| 1.20     368s
+step  3300  train 1.4862  val 1.5352  aux 1.000  lr 4.26e-05  |g| 1.17     399s
+step  3400  train 1.4872  val 1.5321  aux 1.000  lr 3.32e-05  |g| 1.27     430s
+step  3500  train 1.4708  val 1.5286  aux 1.000  lr 3.00e-05  |g| 1.22     461s
+  expert load per layer:
+  0.26 0.25 0.25 0.24
+  0.27 0.24 0.26 0.23
+  0.26 0.25 0.26 0.23
+  0.25 0.23 0.25 0.27
+
+--- sample ---
+ROMEO:
+
+                                              
+           
+
+VI.
+
+
+    
+                                                       
+Speniam.
+                                      
+Wissister;
+                I drare refaire to her said;
+  We shall borne's pay them something that I."
+
+MRS. FORD.
+I do not 
+--------------
+== phase: moe_e8_k1  (E=8, top-k=1)
+data: 5,057,279 chars, vocab 84, train 4,804,416 / val 252,863
+loaded runs/dense/ckpt.pkl @ step 2000  (dense)
+upcycled dense MLPs -> MoE with E=8, top-k=1
+params: total=4,521,216  active/token=833,280
+step  2000  val 1.6210   (initial, no updates yet)
+  expert load per layer (fraction of routing assignments):
+  0.12 0.00 0.14 0.02 0.19 0.14 0.38 0.01
+  0.22 0.05 0.01 0.43 0.02 0.01 0.04 0.23
+  0.02 0.14 0.05 0.06 0.35 0.30 0.05 0.03
+  0.25 0.08 0.13 0.05 0.07 0.16 0.12 0.15
+step  2100  train 1.6228  val 1.6422  aux 1.001  lr 2.99e-04  |g| 1.30      68s
+step  2200  train 1.6276  val 1.6412  aux 1.001  lr 2.93e-04  |g| 1.33     133s
+step  2300  train 1.6017  val 1.6323  aux 1.000  lr 2.81e-04  |g| 1.17     198s
+step  2400  train 1.5960  val 1.6296  aux 1.000  lr 2.63e-04  |g| 1.15     264s
+step  2500  train 1.5865  val 1.6055  aux 1.000  lr 2.41e-04  |g| 1.18     329s
+  expert load per layer:
+  0.13 0.15 0.11 0.09 0.10 0.13 0.13 0.16
+  0.10 0.12 0.15 0.11 0.11 0.12 0.17 0.12
+  0.14 0.13 0.10 0.15 0.14 0.14 0.10 0.10
+  0.11 0.15 0.07 0.12 0.11 0.15 0.15 0.13
+step  2600  train 1.5629  val 1.5980  aux 1.001  lr 2.15e-04  |g| 1.12     395s
+step  2700  train 1.5600  val 1.5916  aux 1.000  lr 1.87e-04  |g| 1.18     462s
+step  2800  train 1.5305  val 1.5799  aux 1.000  lr 1.58e-04  |g| 1.12     528s
+step  2900  train 1.5216  val 1.5707  aux 1.000  lr 1.29e-04  |g| 1.15     595s
+step  3000  train 1.5219  val 1.5639  aux 1.000  lr 1.02e-04  |g| 1.09     661s
+  expert load per layer:
+  0.12 0.10 0.10 0.12 0.12 0.16 0.13 0.15
+  0.13 0.12 0.11 0.10 0.11 0.15 0.15 0.13
+  0.12 0.11 0.12 0.11 0.16 0.13 0.16 0.10
+  0.12 0.15 0.13 0.12 0.13 0.11 0.12 0.13
+step  3100  train 1.4989  val 1.5524  aux 1.000  lr 7.78e-05  |g| 1.11     726s
+step  3200  train 1.4889  val 1.5430  aux 1.000  lr 5.77e-05  |g| 1.16     792s
+step  3300  train 1.4843  val 1.5407  aux 1.000  lr 4.26e-05  |g| 1.09     858s
+step  3400  train 1.4823  val 1.5377  aux 1.000  lr 3.32e-05  |g| 1.18     924s
+step  3500  train 1.4677  val 1.5330  aux 1.000  lr 3.00e-05  |g| 1.16     990s
+  expert load per layer:
+  0.13 0.13 0.14 0.13 0.13 0.11 0.13 0.12
+  0.13 0.12 0.13 0.12 0.12 0.13 0.12 0.12
+  0.12 0.12 0.13 0.11 0.14 0.14 0.12 0.11
+  0.12 0.12 0.12 0.13 0.12 0.13 0.12 0.15
+
+--- sample ---
+ROMEO:
+
+
+SCENE V.                                     Come, a way,
+the same of
+ Will here fools dread be merry and be three in the
+will protest and a stake and done to where no mouth
+With so, who hast is it sudden him refected
+A call and the man. The crown of manners of thou
+Here should hearts the live.
+
+A
+--------------
+== phase: moe_e8_k2  (E=8, top-k=2)
+data: 5,057,279 chars, vocab 84, train 4,804,416 / val 252,863
+loaded runs/dense/ckpt.pkl @ step 2000  (dense)
+upcycled dense MLPs -> MoE with E=8, top-k=2
+params: total=4,521,216  active/token=1,360,128
+step  2000  val 1.6210   (initial, no updates yet)
+  expert load per layer (fraction of routing assignments):
+  0.09 0.01 0.14 0.06 0.26 0.17 0.24 0.02
+  0.20 0.05 0.01 0.37 0.03 0.03 0.07 0.24
+  0.04 0.13 0.06 0.06 0.31 0.28 0.07 0.05
+  0.20 0.10 0.14 0.06 0.08 0.15 0.13 0.13
+step  2100  train 1.6044  val 1.6330  aux 1.119  lr 2.99e-04  |g| 1.25      66s
+step  2200  train 1.5974  val 1.6101  aux 1.382  lr 2.93e-04  |g| 1.27     132s
+step  2300  train 1.5719  val 1.6083  aux 1.478  lr 2.81e-04  |g| 1.14     198s
+step  2400  train 1.5609  val 1.5996  aux 1.511  lr 2.63e-04  |g| 1.21     264s
+step  2500  train 1.5485  val 1.5770  aux 1.518  lr 2.41e-04  |g| 1.12     330s
+  expert load per layer:
+  0.01 0.15 0.15 0.00 0.03 0.01 0.47 0.19
+  0.06 0.50 0.04 0.11 0.05 0.02 0.06 0.15
+  0.19 0.02 0.26 0.32 0.02 0.04 0.01 0.14
+  0.19 0.10 0.08 0.16 0.11 0.14 0.19 0.02
+step  2600  train 1.5272  val 1.5727  aux 1.541  lr 2.15e-04  |g| 1.15     395s
+step  2700  train 1.5202  val 1.5651  aux 1.522  lr 1.87e-04  |g| 1.15     461s
+step  2800  train 1.4885  val 1.5473  aux 1.500  lr 1.58e-04  |g| 1.09     527s
+step  2900  train 1.4850  val 1.5434  aux 1.457  lr 1.29e-04  |g| 1.12     592s
+step  3000  train 1.4849  val 1.5347  aux 1.445  lr 1.02e-04  |g| 1.12     658s
+  expert load per layer:
+  0.08 0.12 0.05 0.04 0.01 0.05 0.48 0.17
+  0.02 0.50 0.09 0.02 0.04 0.02 0.03 0.27
+  0.21 0.06 0.22 0.26 0.02 0.05 0.03 0.15
+  0.17 0.10 0.09 0.14 0.13 0.15 0.17 0.05
+step  3100  train 1.4619  val 1.5245  aux 1.397  lr 7.78e-05  |g| 1.11     724s
+step  3200  train 1.4548  val 1.5185  aux 1.367  lr 5.77e-05  |g| 1.15     789s
+step  3300  train 1.4531  val 1.5169  aux 1.334  lr 4.26e-05  |g| 1.07     855s
+step  3400  train 1.4513  val 1.5160  aux 1.317  lr 3.32e-05  |g| 1.22     920s
+step  3500  train 1.4373  val 1.5117  aux 1.294  lr 3.00e-05  |g| 1.10     985s
+  expert load per layer:
+  0.05 0.12 0.08 0.04 0.16 0.00 0.48 0.07
+  0.11 0.50 0.06 0.06 0.16 0.06 0.04 0.01
+  0.21 0.06 0.20 0.24 0.04 0.09 0.03 0.14
+  0.16 0.09 0.09 0.14 0.12 0.16 0.17 0.06
+
+--- sample ---
+ROMEO:
+
+A                                                              
+
+     
+                                                       
+SCENE.
+Here no shall not behave the longed of fine,
+Is that honest to kill I had hereful,
+  A call and teal in thy lord;
+   What has obilion her service it.
+
+MENENIUS.
+The 
+--------------
+SWEEP DONE — compare runs/moe_e*_k*/log.csv against runs/dense_cont and runs/moe

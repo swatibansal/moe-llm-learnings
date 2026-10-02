@@ -1,0 +1,12 @@
+# environment
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+
+# checkpoints: ~780 MB locally, regenerable with the run_*.sh scripts
+runs/*/ckpt.pkl
+runs/*/ckpt.pkl.tmp
+
+# phase markers: excluded so a fresh clone re-runs phases instead of skipping them without a checkpoint
+runs/*/DONE

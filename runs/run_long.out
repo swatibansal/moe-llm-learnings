@@ -1,0 +1,208 @@
+== phase: dense_cont_long
+data: 5,057,279 chars, vocab 84, train 4,804,416 / val 252,863
+loaded runs/dense/ckpt.pkl @ step 2000  (dense)
+params: total=829,184  active/token=829,184
+step  2000  val 1.6210   (initial, no updates yet)
+step  2100  train 1.5914  val 1.6126  lr 3.00e-04  |g| 1.42       8s
+step  2200  train 1.5948  val 1.6067  lr 2.99e-04  |g| 1.46      16s
+step  2300  train 1.5771  val 1.6107  lr 2.98e-04  |g| 1.31      24s
+step  2400  train 1.5754  val 1.6039  lr 2.97e-04  |g| 1.31      33s
+step  2500  train 1.5739  val 1.5917  lr 2.95e-04  |g| 1.39      41s
+step  2600  train 1.5600  val 1.6006  lr 2.92e-04  |g| 1.35      49s
+step  2700  train 1.5603  val 1.6005  lr 2.89e-04  |g| 1.54      57s
+step  2800  train 1.5340  val 1.5787  lr 2.85e-04  |g| 1.52      66s
+step  2900  train 1.5382  val 1.5757  lr 2.81e-04  |g| 1.34      74s
+step  3000  train 1.5413  val 1.5739  lr 2.76e-04  |g| 1.38      82s
+step  3100  train 1.5235  val 1.5685  lr 2.71e-04  |g| 1.34      90s
+step  3200  train 1.5171  val 1.5684  lr 2.66e-04  |g| 1.40      98s
+step  3300  train 1.5140  val 1.5660  lr 2.60e-04  |g| 1.32     106s
+step  3400  train 1.5158  val 1.5606  lr 2.53e-04  |g| 1.56     114s
+step  3500  train 1.4982  val 1.5582  lr 2.47e-04  |g| 1.46     122s
+step  3600  train 1.4989  val 1.5525  lr 2.40e-04  |g| 1.44     130s
+step  3700  train 1.4951  val 1.5542  lr 2.33e-04  |g| 1.43     138s
+step  3800  train 1.4971  val 1.5496  lr 2.25e-04  |g| 1.57     146s
+step  3900  train 1.4933  val 1.5453  lr 2.17e-04  |g| 1.47     154s
+step  4000  train 1.4940  val 1.5437  lr 2.09e-04  |g| 1.57     162s
+step  4100  train 1.4932  val 1.5411  lr 2.01e-04  |g| 1.53     170s
+step  4200  train 1.4703  val 1.5427  lr 1.93e-04  |g| 1.47     177s
+step  4300  train 1.4689  val 1.5349  lr 1.84e-04  |g| 1.47     185s
+step  4400  train 1.4643  val 1.5346  lr 1.76e-04  |g| 1.65     193s
+step  4500  train 1.4701  val 1.5298  lr 1.67e-04  |g| 1.57     201s
+step  4600  train 1.4707  val 1.5247  lr 1.59e-04  |g| 1.54     209s
+step  4700  train 1.4559  val 1.5267  lr 1.50e-04  |g| 1.53     217s
+step  4800  train 1.4534  val 1.5174  lr 1.42e-04  |g| 1.43     225s
+step  4900  train 1.4486  val 1.5181  lr 1.33e-04  |g| 1.70     232s
+step  5000  train 1.4530  val 1.5149  lr 1.25e-04  |g| 1.55     240s
+step  5100  train 1.4477  val 1.5135  lr 1.17e-04  |g| 1.50     248s
+step  5200  train 1.4371  val 1.5066  lr 1.09e-04  |g| 1.56     256s
+step  5300  train 1.4387  val 1.5120  lr 1.01e-04  |g| 1.60     264s
+step  5400  train 1.4300  val 1.5088  lr 9.39e-05  |g| 1.49     272s
+step  5500  train 1.4372  val 1.5012  lr 8.68e-05  |g| 1.53     280s
+step  5600  train 1.4303  val 1.5000  lr 7.99e-05  |g| 1.55     288s
+step  5700  train 1.4373  val 1.5004  lr 7.35e-05  |g| 1.44     295s
+step  5800  train 1.4242  val 1.4945  lr 6.74e-05  |g| 1.41     303s
+step  5900  train 1.4301  val 1.4978  lr 6.16e-05  |g| 1.61     311s
+step  6000  train 1.4253  val 1.4942  lr 5.63e-05  |g| 1.49     319s
+step  6100  train 1.4208  val 1.4938  lr 5.15e-05  |g| 1.62     327s
+step  6200  train 1.4154  val 1.4932  lr 4.71e-05  |g| 1.53     335s
+step  6300  train 1.4139  val 1.4914  lr 4.31e-05  |g| 1.62     343s
+step  6400  train 1.4138  val 1.4908  lr 3.97e-05  |g| 1.58     350s
+step  6500  train 1.4117  val 1.4903  lr 3.68e-05  |g| 1.50     358s
+step  6600  train 1.4191  val 1.4896  lr 3.43e-05  |g| 1.57     366s
+step  6700  train 1.4058  val 1.4896  lr 3.25e-05  |g| 1.68     374s
+step  6800  train 1.3989  val 1.4874  lr 3.11e-05  |g| 1.55     382s
+step  6900  train 1.4083  val 1.4858  lr 3.03e-05  |g| 1.51     389s
+step  7000  train 1.4044  val 1.4890  lr 3.00e-05  |g| 1.68     397s
+
+--- sample ---
+ROMEO:
+
+
+CLIV. 
+
+
+[Entenr Chirtus this quoth Hummore. 
+
+[Exeunt.]
+
+
+
+
+
+SCENE III. Here is the footh. The Keney you make a tis's a business.
+
+LADY MACBETH.
+Here be the appeos'd world?
+
+LEONATO.
+Not the enfallies. Come, content so; you are you love, their goys
+hand every flower. Good lay the Cassius?
+
+MENENI
+--------------
+== phase: moe_long
+data: 5,057,279 chars, vocab 84, train 4,804,416 / val 252,863
+loaded runs/dense/ckpt.pkl @ step 2000  (dense)
+upcycled dense MLPs -> MoE with E=4, top-k=2
+params: total=2,411,776  active/token=1,358,080
+step  2000  val 1.6210   (initial, no updates yet)
+  expert load per layer (fraction of routing assignments):
+  0.06 0.14 0.35 0.44
+  0.22 0.10 0.39 0.29
+  0.28 0.23 0.10 0.39
+  0.20 0.35 0.32 0.14
+step  2100  train 1.5996  val 1.6190  aux 1.026  lr 3.00e-04  |g| 1.43      31s
+step  2200  train 1.5959  val 1.6098  aux 1.086  lr 2.99e-04  |g| 1.27      62s
+step  2300  train 1.5742  val 1.6090  aux 1.108  lr 2.98e-04  |g| 1.13      93s
+step  2400  train 1.5679  val 1.5978  aux 1.134  lr 2.97e-04  |g| 1.13     124s
+step  2500  train 1.5618  val 1.5843  aux 1.146  lr 2.95e-04  |g| 1.20     155s
+  expert load per layer:
+  0.08 0.34 0.45 0.13
+  0.28 0.23 0.05 0.43
+  0.16 0.38 0.36 0.10
+  0.21 0.23 0.31 0.24
+step  2600  train 1.5462  val 1.5897  aux 1.149  lr 2.92e-04  |g| 1.15     187s
+step  2700  train 1.5418  val 1.5921  aux 1.157  lr 2.89e-04  |g| 1.33     217s
+step  2800  train 1.5139  val 1.5703  aux 1.160  lr 2.85e-04  |g| 1.23     248s
+step  2900  train 1.5154  val 1.5647  aux 1.170  lr 2.81e-04  |g| 1.19     279s
+step  3000  train 1.5179  val 1.5605  aux 1.158  lr 2.76e-04  |g| 1.24     309s
+  expert load per layer:
+  0.11 0.32 0.47 0.10
+  0.30 0.15 0.13 0.42
+  0.27 0.29 0.32 0.12
+  0.22 0.26 0.30 0.21
+step  3100  train 1.4961  val 1.5569  aux 1.153  lr 2.71e-04  |g| 1.17     340s
+step  3200  train 1.4894  val 1.5558  aux 1.167  lr 2.66e-04  |g| 1.15     371s
+step  3300  train 1.4865  val 1.5501  aux 1.172  lr 2.60e-04  |g| 1.17     402s
+step  3400  train 1.4835  val 1.5411  aux 1.171  lr 2.53e-04  |g| 1.36     433s
+step  3500  train 1.4665  val 1.5445  aux 1.156  lr 2.47e-04  |g| 1.33     466s
+  expert load per layer:
+  0.12 0.29 0.46 0.14
+  0.28 0.10 0.19 0.43
+  0.21 0.29 0.30 0.20
+  0.20 0.24 0.30 0.26
+step  3600  train 1.4659  val 1.5339  aux 1.172  lr 2.40e-04  |g| 1.22     497s
+step  3700  train 1.4619  val 1.5318  aux 1.167  lr 2.33e-04  |g| 1.29     529s
+step  3800  train 1.4606  val 1.5309  aux 1.167  lr 2.25e-04  |g| 1.37     560s
+step  3900  train 1.4582  val 1.5250  aux 1.167  lr 2.17e-04  |g| 1.30     590s
+step  4000  train 1.4573  val 1.5261  aux 1.160  lr 2.09e-04  |g| 1.26     622s
+  expert load per layer:
+  0.19 0.27 0.47 0.07
+  0.28 0.08 0.20 0.43
+  0.24 0.24 0.28 0.24
+  0.21 0.26 0.30 0.22
+step  4100  train 1.4559  val 1.5217  aux 1.173  lr 2.01e-04  |g| 1.26     655s
+step  4200  train 1.4322  val 1.5230  aux 1.162  lr 1.93e-04  |g| 1.24     689s
+step  4300  train 1.4290  val 1.5141  aux 1.160  lr 1.84e-04  |g| 1.35     721s
+step  4400  train 1.4210  val 1.5089  aux 1.158  lr 1.76e-04  |g| 1.32     753s
+step  4500  train 1.4288  val 1.5041  aux 1.146  lr 1.67e-04  |g| 1.34     784s
+  expert load per layer:
+  0.19 0.24 0.47 0.10
+  0.27 0.27 0.04 0.42
+  0.25 0.24 0.28 0.22
+  0.21 0.25 0.29 0.24
+step  4600  train 1.4264  val 1.5058  aux 1.154  lr 1.59e-04  |g| 1.23     815s
+step  4700  train 1.4107  val 1.5062  aux 1.150  lr 1.50e-04  |g| 1.25     846s
+step  4800  train 1.4083  val 1.4942  aux 1.139  lr 1.42e-04  |g| 1.19     876s
+step  4900  train 1.4046  val 1.4915  aux 1.147  lr 1.33e-04  |g| 1.39     907s
+step  5000  train 1.4052  val 1.4916  aux 1.144  lr 1.25e-04  |g| 1.18     938s
+  expert load per layer:
+  0.13 0.21 0.47 0.18
+  0.26 0.17 0.15 0.42
+  0.26 0.25 0.26 0.23
+  0.22 0.25 0.29 0.24
+step  5100  train 1.4025  val 1.4893  aux 1.141  lr 1.17e-04  |g| 1.20     969s
+step  5200  train 1.3895  val 1.4829  aux 1.131  lr 1.09e-04  |g| 1.32    1000s
+step  5300  train 1.3917  val 1.4836  aux 1.129  lr 1.01e-04  |g| 1.43    1031s
+step  5400  train 1.3802  val 1.4809  aux 1.126  lr 9.39e-05  |g| 1.25    1062s
+step  5500  train 1.3892  val 1.4743  aux 1.121  lr 8.68e-05  |g| 1.27    1092s
+  expert load per layer:
+  0.13 0.22 0.47 0.19
+  0.26 0.09 0.25 0.39
+  0.26 0.24 0.27 0.23
+  0.21 0.25 0.30 0.24
+step  5600  train 1.3802  val 1.4717  aux 1.113  lr 7.99e-05  |g| 1.27    1123s
+step  5700  train 1.3897  val 1.4741  aux 1.112  lr 7.35e-05  |g| 1.15    1155s
+step  5800  train 1.3738  val 1.4665  aux 1.107  lr 6.74e-05  |g| 1.16    1185s
+step  5900  train 1.3779  val 1.4664  aux 1.111  lr 6.16e-05  |g| 1.19    1216s
+step  6000  train 1.3764  val 1.4656  aux 1.107  lr 5.63e-05  |g| 1.30    1246s
+  expert load per layer:
+  0.26 0.21 0.46 0.06
+  0.26 0.22 0.14 0.39
+  0.27 0.24 0.27 0.21
+  0.21 0.25 0.30 0.24
+step  6100  train 1.3709  val 1.4648  aux 1.102  lr 5.15e-05  |g| 1.32    1277s
+step  6200  train 1.3613  val 1.4641  aux 1.098  lr 4.71e-05  |g| 1.29    1307s
+step  6300  train 1.3657  val 1.4611  aux 1.097  lr 4.31e-05  |g| 1.36    1338s
+step  6400  train 1.3638  val 1.4583  aux 1.093  lr 3.97e-05  |g| 1.30    1369s
+step  6500  train 1.3582  val 1.4592  aux 1.091  lr 3.68e-05  |g| 1.24    1400s
+  expert load per layer:
+  0.28 0.20 0.46 0.07
+  0.25 0.23 0.16 0.36
+  0.26 0.23 0.28 0.23
+  0.21 0.25 0.30 0.24
+step  6600  train 1.3694  val 1.4595  aux 1.087  lr 3.43e-05  |g| 1.24    1431s
+step  6700  train 1.3551  val 1.4592  aux 1.087  lr 3.25e-05  |g| 1.30    1464s
+step  6800  train 1.3452  val 1.4576  aux 1.085  lr 3.11e-05  |g| 1.29    1496s
+step  6900  train 1.3562  val 1.4554  aux 1.083  lr 3.03e-05  |g| 1.22    1528s
+step  7000  train 1.3518  val 1.4554  aux 1.082  lr 3.00e-05  |g| 1.39    1560s
+  expert load per layer:
+  0.20 0.19 0.46 0.14
+  0.25 0.23 0.17 0.36
+  0.27 0.24 0.27 0.23
+  0.22 0.25 0.29 0.24
+
+--- sample ---
+ROMEO:
+
+
+Scene VII. The Goy. Fellow, so might. Querr, Come, up the
+tiding; I do much very mother bear them,
+Dissolute the Lord France and Tranio with standing such a straight now in
+innocent, who hath it is no whore harvice,
+Speak the amition in thy lord; which then, this mind
+That black, and dear live.
+
+A
+--------------
+LONG PHASE 2 DONE — compare runs/dense_cont_long/log.csv vs runs/moe_long/log.csv

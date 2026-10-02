@@ -1,0 +1,42 @@
+{
+  "args": {
+    "run": "runs/moe_e4_k1_sg",
+    "data": "data/input.txt",
+    "init": "runs/dense/ckpt.pkl",
+    "resume": true,
+    "max_seconds": 0.0,
+    "upcycle": true,
+    "n_experts": 4,
+    "top_k": 1,
+    "aux_coef": 0.01,
+    "gate_grad": "stopgrad",
+    "steps": 1500,
+    "batch": 32,
+    "lr": 0.0003,
+    "lr_final": 3e-05,
+    "warmup": 50,
+    "eval_every": 100,
+    "eval_batches": 20,
+    "seed": 0,
+    "data_seed": 1234,
+    "n_layer": 4,
+    "d_model": 128,
+    "n_head": 4,
+    "d_ff": 512,
+    "block": 128
+  },
+  "cfg": {
+    "vocab": 84,
+    "block": 128,
+    "d_model": 128,
+    "n_head": 4,
+    "n_layer": 4,
+    "d_ff": 512,
+    "n_experts": 4,
+    "top_k": 1,
+    "aux_coef": 0.01,
+    "gate_grad": "stopgrad"
+  },
+  "params_total": 2411776,
+  "params_active": 831232
+}
