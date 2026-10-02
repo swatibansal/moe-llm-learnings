@@ -139,6 +139,40 @@ recommended MoE. Dense 1.5395 ± 0.0013, MoE 1.4995 ± 0.0017, **paired gap −0
 **Wrap-up status:** core experiment closed 2026-09-30 — `RESULTS.md` is the narrative, `runs/headline.png` the figure,
 `verify.py` (4 checks, 19 upcycled runs) the machine-checked claims. Remaining queue items (#4–#7, #2c) are extensions.
 
+**#3c Aux-loss-free balancing (2026-10-02, `run_bias.sh` + `run_bias2.sh`; DeepSeek-V3-style per-expert selection bias).**
+Implementation: `sel_bias` (E,) per MoE block, zero at upcycle, added to the scores used to *choose* the top-k only (gates
+still from unbiased probs → still exactly function-preserving); after every step `bias_e += γ·sign(1/E − f_e)`; no gradient,
+not counted as a parameter, stored in the ckpt. `--bias-gamma γ`, `--bias-on {logits,probs}`. Tests: `tests/test_bias_balance.py`
+(7), `tests/test_bias_bounded.py` (3). All arms E=8 top-2, router_std 1e-2, same parent/steps/schedule/batches; seed noise ±0.0015.
+
+| run | aux | γ | bias on | val @3500 | worst max-load | dead | note |
+|---|---|---|---|---|---|---|---|
+| `moe_e8_k2_aux0_std0p01` | 0 | – | – | 1.5137 | 0.50 | 17 | no balancing at all: collapse |
+| `moe_e8_k2_bias0p001` | 0 | 1e-3 | logits | 1.5107 | 0.49 | 1 | **bias lost the race**: |bias| hit its 1.5 ceiling, logit gaps larger; layers 0–1 still ~50% |
+| `moe_e8_k2_bias0p01` | 0 | 1e-2 | logits | 1.5018 | 0.15 | 0 | 10× step: balanced; |bias| ≤ 0.42 — acting early keeps the router from ever getting confident |
+| `moe_e8_k2_pbias0p001` | 0 | 1e-3 | **probs** | 1.5023 | 0.14 | 0 | paper-faithful (bounded scores): works at the paper's γ |
+| `moe_e8_k2_pbias0p01` | 0 | 1e-2 | probs | 1.5011 | 0.19 | 0 | |
+| `moe_e8_k2_std0p01` | 0.01 | – | – | 1.5007 | 0.41 | 0 | aux loss, default strength |
+| `moe_e8_k2_aux0p1_std0p01` | 0.1 | – | – | **1.4976** | 0.15 | 0 | aux loss, strong — still the best |
+| `moe_e8_k2_bias0p001_aux0p1` | 0.1 | 1e-3 | logits | 1.5020 | 0.15 | 0 | bias on top of aux: no gain |
+| `moe_e8_k2_pbias0p001_aux0p1` | 0.1 | 1e-3 | probs | 1.5025 | 0.14 | 0 | same |
+| `moe_e8_k2_bias0p001_std0` | 0 | 1e-3 | logits | 1.5597 | 0.50 | 24 | std 0: router stays exactly 0; bias only *rotates* which identical pair is picked; pairs never split |
+
+Findings:
+- **Aux-loss-free balancing works here, once the bias can actually win.** Bias-only arms with γ=1e-2 (logits) or bounded
+  scores (probs, γ=1e-3) reach perfectly even loads and 1.501–1.502 — level with aux 0.01 (1.5007), ~1.5–2σ behind aux 0.1 (1.4976).
+  So on this toy the aux loss is not holding the model back; the two mechanisms land in the same place.
+- **Boundedness is the key design detail, not the sign rule.** Added to unbounded softmax logits with the paper's γ=1e-3, the bias
+  can grow only 1.5 in 1500 steps while an unregularised router's logit gaps grow faster → collapse persists (router RMS 2.9e-2
+  vs 1.4e-2 in balanced arms; H(P)/lnE 0.30 in layer 0). The paper biases *sigmoid* affinities in [0,1], where a bias of order 1
+  always suffices. Either a 10× γ (wins the race early) or biasing the bounded probs fixes it.
+- **Bias + aux is not additive** (1.502 vs 1.4976): once loads are even, extra balancing pressure only perturbs selection.
+- **Bias cannot break exact-tie symmetry.** With router_std 0 the two members of a tied pair are always selected together, so the
+  bias rotates pairs but never splits one; the router gets zero gradient (equal gates, identical experts) and stays exactly 0.
+  Loss went *up* early (1.6387 @2300) because every token's MLP changed pair every step. Confirms #3: break symmetry at init.
+- Dynamics worth noting for the write-up: a step-size race between bias growth (γ per step, linear) and router confidence growth
+  (gradient-driven, can be much faster) decides whether bias balancing holds. Bounded scores remove the race entirely.
+
 Verified (`python verify.py`):
 - Upcycling is function-preserving: max |dense logits − upcycled MoE logits| = 3e-5 (fp noise);
   the MoE's step-0 val loss equals the dense parent's exactly (1.6210).
@@ -165,6 +199,9 @@ run_ablation.sh           next-experiment #3/#3b: E=8 top-2 with aux_coef∈{0,0
 router_analysis.py        per-layer loads, max-load, dead experts, router entropy/RMS + val on fixed val batches, for any MoE ckpts; markdown summary
 run_seeds.sh              wrap-up: 2 extra PAIRED seeds (data-seed s for both arms) of dense control vs recommended E=8 MoE → runs/{dense_cont,moe_e8_rec}_s{1,2}
 seeds_report.py           per-pair gap + mean ± std over the 3 pairs (orig 1234 + s1 + s2)
+run_bias.sh / run_bias2.sh  #3c aux-loss-free balancing arms (selection bias on logits / on bounded probs) → runs/moe_e8_k2_{bias,pbias}*
+tests/test_bias_balance.py  sel_bias: zero at upcycle, preservation for any bias, selection flips, sign-rule update, no grad, not counted
+tests/test_bias_bounded.py  bias_on=probs can always flip a confident router; logits cannot; preservation; default = logits
 RESULTS.md                narrative write-up of all findings (for the ERA session); headline figure runs/headline.png (plot.py)
 requirements.txt/.lock    top-level deps / full uv-compiled pin set; .venv = uv venv, CPython 3.13, jax 0.11.2
 plot.py                   loss curves (full + phase-2 zoom); picks up *_long runs when present, prints MoE−dense gap
@@ -181,6 +218,9 @@ runs/*.out                stdout of the batch launchers — the ONLY place per-l
   Switch-style load-balancing aux loss (E·Σ f_e·P_e, mean over MoE layers), `aux_coef=0.01`.
   **Recommended for new experiments (from ablation #3/#3b, 2026-09-30):** `--n-experts 8 --top-k 2 --aux-coef 0.1 --router-std 1e-2`
   → val 1.4976 @3500 vs 1.5186 for the E=4 defaults and 1.5390 dense. CLI defaults intentionally left as-is so `runs/moe` reproduces.
+- Alternative balancing (#3c): `--bias-gamma 1e-3 --bias-on probs --aux-coef 0` (DeepSeek-V3-style, no aux loss) gives even loads
+  and 1.5023 — equivalent to aux 0.01, slightly behind aux 0.1. If using `--bias-on logits`, γ must be ≥1e-2 or the bias loses to
+  router confidence growth. Don't stack bias on aux 0.1 (no gain).
 - Router init std 1e-3 (`--router-std`; tiny, non-zero → breaks ties so experts can diverge. **Must be > 0**: with 0,
   experts stay bit-identical in pairs forever — ablation #3. 1e-2 trained better than 1e-3 at E=8.)
 - AdamW β=(0.9,0.95), wd 0.1 on ≥2-D params, grad-clip 1.0, warmup + cosine.
@@ -264,6 +304,9 @@ text file dropped into `data/input.txt` works — vocab must match a checkpoint 
    `moe_e8_k2_aux0p1_std0p01` = **1.4976**, additive gains, balanced; aux 0.1 at E=4 is a wash → sensitivity is
    E-specific. Recommended settings recorded in the config section. Open follow-up (cheap): aux_coef 0.3 / 1.0 at E=8
    to find where over-balancing starts to hurt.
+   **3c: aux-loss-free (bias) balancing — DONE 2026-10-02** (see Results): works when bounded or fast (1.501–1.502), ties aux 0.01,
+   ~2σ behind aux 0.1; unbounded-logit bias at γ=1e-3 loses to router confidence; bias cannot split tied experts.
+   Open: a sequence-wise aux term as in the paper; bias on sigmoid affinities instead of softmax probs (closer replication).
 4. **Expert specialisation analysis**: for the trained MoE, dump which characters/contexts route to
    which expert (e.g. by preceding char class: letter/space/punct/newline, or by speaker-name lines).
    Good notebook material.
@@ -278,7 +321,7 @@ text file dropped into `data/input.txt` works — vocab must match a checkpoint 
 
 ## Guardrails for Claude Code
 
-- After any change to `model.py` or `train.py`: run `python3 tests/test_gating.py`, `python3 verify.py` (needs existing `runs/`),
+- After any change to `model.py` or `train.py`: run `for t in tests/test_*.py; do python3 $t; done`, `python3 verify.py` (needs existing `runs/`),
   and a 30-step smoke run: `python3 -m moe.train --run /tmp/smoke --steps 30 --eval-every 10 --eval-batches 2`.
 - Keep `log.csv` schema stable (`step,train_loss,val_loss,aux_loss,lr,grad_norm,sec`); plot.py and verify.py read it.
 - Report losses in nats/char; always state total *and* active params alongside any MoE number.

@@ -39,7 +39,7 @@ def route_stats(params, cfg, data):
             h = M.layer_norm(x, **blk["ln2"])
             pr = jax.nn.softmax(h @ blk["moe"]["router"], axis=-1)
             out.append(pr.reshape(-1, E))
-            y, _, _ = M.moe_ffn(blk["moe"], h, k, cfg.get("gate_grad", "renorm"))
+            y, _, _ = M.moe_ffn(blk["moe"], h, k, cfg.get("gate_grad", "renorm"), cfg.get("bias_on", "logits"))
             x = x + y
         return out
     pbl = jax.jit(probs_by_layer)
@@ -66,12 +66,14 @@ def main(runs):
         E = cfg["n_experts"]
         H = -(P * np.log(P + 1e-12)).sum(-1) / np.log(E)
         rms = [float(jnp.sqrt((b["moe"]["router"] ** 2).mean())) for b in params["blocks"]]
+        biases = [b["moe"].get("sel_bias") for b in params["blocks"]]
         print(f"\n== {run}   E={E} top-{cfg['top_k']} aux_coef={cfg.get('aux_coef')} router_std={cfg.get('router_std', '1e-3 (default)')} "
-              f"gate={cfg.get('gate_grad', 'renorm')}   val={val:.4f} (over {N_BATCHES} fixed val batches)")
-        print("  layer  max-load  dead  H(P)/lnE  routerRMS   loads")
+              f"bias_gamma={cfg.get('bias_gamma', 0)} bias_on={cfg.get('bias_on', 'logits')} gate={cfg.get('gate_grad', 'renorm')}   val={val:.4f} (over {N_BATCHES} fixed val batches)")
+        print("  layer  max-load  dead  H(P)/lnE  routerRMS  |sel_bias|max   loads")
         for l in range(len(loads)):
             dead = int((loads[l] < 0.01).sum())
-            print(f"  {l:5d}  {loads[l].max():8.2f}  {dead:4d}  {H[l]:8.2f}  {rms[l]:9.2e}   " + " ".join(f"{v:.2f}" for v in loads[l]))
+            bmax = 0.0 if biases[l] is None else float(jnp.abs(biases[l]).max())
+            print(f"  {l:5d}  {loads[l].max():8.2f}  {dead:4d}  {H[l]:8.2f}  {rms[l]:9.2e}  {bmax:12.3f}   " + " ".join(f"{v:.2f}" for v in loads[l]))
         rows.append((os.path.basename(run), cfg.get("aux_coef"), cfg.get("router_std", 1e-3), val,
                      loads.max(1).mean(), loads.max(), int((loads < 0.01).sum()), H.mean()))
     if rows:

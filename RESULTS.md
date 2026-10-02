@@ -101,6 +101,39 @@ between the top ablation arms (0.003–0.006: combined vs std-only vs aux-only) 
 read as "same ballpark, combined is at least as good", not as a ranking. Single-seed numbers elsewhere in this
 document carry the same ±0.0015 uncertainty.
 
+## 8. Balancing without a penalty: the DeepSeek-style selection bias
+
+Our balancing so far was a penalty term in the loss (Switch-style auxiliary loss). DeepSeek-V3 instead keeps a
+per-expert bias that is added to the router's scores only when *choosing* experts; after each step the bias is nudged
+down for over-used experts and up for under-used ones by a fixed step γ. Nothing enters the loss, so the router's
+learning signal stays purely about predicting characters. We implemented it (`--bias-gamma`, `--bias-on`), kept
+upcycling exactly function-preserving (bias changes who is picked, never the blend weights), and ran it on E=8 top-2.
+
+| balancing | val @3500 | loads |
+|---|---|---|
+| none | 1.5137 | collapsed (one expert ~50% in 3 layers, 17 dead slots) |
+| bias γ=1e-3 on logits | 1.5107 | **still collapsed** in layers 0–1 |
+| bias γ=1e-2 on logits | 1.5018 | even |
+| bias γ=1e-3 on bounded probs (paper-faithful) | 1.5023 | even |
+| aux loss 0.01 | 1.5007 | one expert at 41% |
+| aux loss 0.1 | **1.4976** | even |
+| bias + aux 0.1 | 1.5020 / 1.5025 | even, no gain |
+
+Three lessons:
+
+- **It works — once the bias can actually win.** Both the bounded version at the paper's step size and the 10× step on raw
+  logits produce perfectly even loads and land at 1.501–1.502, the same place as the auxiliary loss at 0.01 and about one
+  noise band (±0.0015) behind the strong auxiliary loss. On this toy neither mechanism is clearly better; they converge.
+- **Boundedness is the detail that matters.** Added to unbounded softmax logits at γ=1e-3, the bias can only grow 1.5 over
+  the whole run, while an unregularised router's score gaps grow faster — it is a step-size race, and the bias lost (its
+  magnitude hit the 1.5 ceiling with the dominant expert still at 49%). The paper biases sigmoid affinities in [0,1], where a
+  bias of order 1 always suffices. Biasing our bounded probabilities instead removes the race; so does a 10× step that wins
+  it early, before the router becomes confident.
+- **Bias cannot create diversity, only redistribute it.** With a zero-initialised router (the exact-tie case from §6), the
+  bias rotates *which* identical pair of experts is chosen but can never split a pair, because tied experts are always picked
+  together and get identical updates. The router stayed at exactly zero and the loss briefly rose above its starting point
+  because every token's MLP changed pair every step. Symmetry breaking has to come from the router init.
+
 ## Not done / open
 
 - Real sparse dispatch and a fair wall-clock comparison (#5). Fair-FLOPs dense control with d_ff=1024 (#6).
