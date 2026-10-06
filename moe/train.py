@@ -87,6 +87,11 @@ def main():
     ap.add_argument("--n-experts", type=int, default=4)
     ap.add_argument("--top-k", type=int, default=2)
     ap.add_argument("--aux-coef", type=float, default=0.01)
+    ap.add_argument("--bias-gamma", type=float, default=0.0,
+                    help="aux-loss-free balancing step (DeepSeek-V3): per-expert selection bias moves by ±gamma per step "
+                         "toward equal load. 0 = off. Stored in cfg at --upcycle time.")
+    ap.add_argument("--bias-on", choices=["logits", "probs"], default="logits",
+                    help="what the selection bias is added to: unbounded router logits (original) or bounded softmax probs")
     ap.add_argument("--router-std", type=float, default=1e-3,
                     help="router init std at --upcycle (0 = exact ties; only the aux loss can break symmetry)")
     ap.add_argument("--gate-grad", choices=["renorm", "stopgrad"], default="renorm",
@@ -131,9 +136,10 @@ def main():
             key, sub = jax.random.split(key)
             params = M.upcycle_dense_to_moe(params, args.n_experts, sub, router_std=args.router_std)
             cfg = {**cfg, "n_experts": args.n_experts, "top_k": args.top_k, "aux_coef": args.aux_coef,
-                   "gate_grad": args.gate_grad, "router_std": args.router_std}
+                   "gate_grad": args.gate_grad, "router_std": args.router_std, "bias_gamma": args.bias_gamma,
+                   "bias_on": args.bias_on}
             print(f"upcycled dense MLPs -> MoE with E={args.n_experts}, top-k={args.top_k}, "
-                  f"gate_grad={args.gate_grad}, router_std={args.router_std:g}")
+                  f"gate_grad={args.gate_grad}, router_std={args.router_std:g}, bias_gamma={args.bias_gamma:g}, bias_on={args.bias_on}")
     else:
         cfg = {"vocab": data.vocab, "block": args.block, "d_model": args.d_model, "n_head": args.n_head,
                "n_layer": args.n_layer, "d_ff": args.d_ff}
@@ -154,6 +160,7 @@ def main():
     def train_step(params, opt, x, y, lr):
         (loss, (ce, aux, loads)), g = jax.value_and_grad(M.loss_fn, has_aux=True)(params, x, y, cfg)
         params, opt, gnorm = adamw_update(params, g, opt, lr)
+        params = M.update_sel_bias(params, loads, cfg.get("bias_gamma", 0.0))   # no-op unless --bias-gamma > 0
         return params, opt, ce, aux, gnorm, loads
 
     @jax.jit

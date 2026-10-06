@@ -69,6 +69,7 @@ def upcycle_dense_to_moe(dense_params: dict, n_experts: int, key, router_std: fl
         rk = jax.random.fold_in(key, i)
         blk["moe"] = {
             "router": _normal(rk, (D, n_experts), router_std),
+            "sel_bias": jnp.zeros((n_experts,), jnp.float32),  # aux-loss-free balancing bias (selection only; no grad)
             "w1": jnp.stack([mlp["w1"]] * n_experts),  # (E, D, H)
             "b1": jnp.stack([mlp["b1"]] * n_experts),  # (E, H)
             "w2": jnp.stack([mlp["w2"]] * n_experts),  # (E, H, D)
@@ -79,14 +80,21 @@ def upcycle_dense_to_moe(dense_params: dict, n_experts: int, key, router_std: fl
     return p
 
 
+def _is_sel_bias(a_path) -> bool:
+    return any(getattr(k, "key", None) == "sel_bias" for k in a_path)
+
+
 def count_params(p) -> int:
-    return int(sum(a.size for a in jax.tree_util.tree_leaves(p)))
+    """All learned params. The balancing bias `sel_bias` is a counter, not a parameter: excluded."""
+    return int(sum(a.size for a_path, a in jax.tree_util.tree_leaves_with_path(p) if not _is_sel_bias(a_path)))
 
 
 def count_active_params(p, cfg) -> int:
     """Params touched per token: MoE experts count only k of E."""
     total = 0
     for a_path, a in jax.tree_util.tree_leaves_with_path(p):
+        if _is_sel_bias(a_path):
+            continue
         path = "/".join(str(k) for k in a_path)
         if "moe" in path and "router" not in path:
             total += a.size * cfg["top_k"] // cfg["n_experts"]
@@ -124,7 +132,7 @@ def dense_mlp(p, x):
     return jax.nn.gelu(x @ p["w1"] + p["b1"]) @ p["w2"] + p["b2"]
 
 
-def moe_ffn(p, x, top_k: int, gate_grad: str = "renorm"):
+def moe_ffn(p, x, top_k: int, gate_grad: str = "renorm", bias_on: str = "logits"):
     """Top-k routed mixture of experts.
 
     Educational 'dense-masked' implementation: every expert is evaluated on
@@ -143,7 +151,17 @@ def moe_ffn(p, x, top_k: int, gate_grad: str = "renorm"):
     E = p["router"].shape[1]
     logits = x @ p["router"]                                   # (B,T,E)
     probs = jax.nn.softmax(logits, axis=-1)
-    topv, topi = jax.lax.top_k(probs, top_k)                   # (B,T,k)
+    # Aux-loss-free balancing (DeepSeek-V3): a per-expert bias shifts the scores used to CHOOSE experts,
+    # but the gate weights still come from the unbiased probs. Zero bias == plain top-k on probs.
+    # bias_on="logits": unbounded scores — a confident router can out-grow any bias (observed: collapse persists).
+    # bias_on="probs":  bounded scores in [0,1] (the paper biases bounded sigmoid affinities) — a bias of
+    #                   order 1 can always flip a selection.
+    if bias_on not in ("logits", "probs"):
+        raise ValueError(f"bias_on must be 'logits' or 'probs', got {bias_on!r}")
+    base = probs if bias_on == "probs" else logits
+    sel = base if p.get("sel_bias") is None else base + p["sel_bias"]
+    _, topi = jax.lax.top_k(sel, top_k)                        # (B,T,k) indices
+    topv = jnp.take_along_axis(probs, topi, axis=-1)           # (B,T,k) unbiased probs of the selected
     denom = topv.sum(-1, keepdims=True)
     if gate_grad == "stopgrad":
         denom = jax.lax.stop_gradient(denom)
@@ -167,6 +185,25 @@ def moe_ffn(p, x, top_k: int, gate_grad: str = "renorm"):
     return y, aux, f
 
 
+def update_sel_bias(p, loads, gamma: float):
+    """Aux-loss-free balancing step: for each MoE layer, bias_e -= gamma if expert e is above the mean
+    assignment fraction, += gamma if below (sign rule, DeepSeek-V3). `loads` = list of (E,) fractions from
+    forward(), one per MoE layer, in order. No-op if gamma == 0 or a block has no sel_bias."""
+    if not gamma:
+        return p
+    p = dict(p)
+    new_blocks = []
+    for blk, f in zip(p["blocks"], loads):
+        if blk["moe"].get("sel_bias") is None:
+            new_blocks.append(blk); continue
+        blk = dict(blk); moe = dict(blk["moe"])
+        moe["sel_bias"] = moe["sel_bias"] + gamma * jnp.sign(1.0 / f.shape[0] - f)
+        blk["moe"] = moe
+        new_blocks.append(blk)
+    p["blocks"] = new_blocks
+    return p
+
+
 def forward(p, idx, cfg):
     """idx: (B,T) int32 -> logits (B,T,V), aux_loss (scalar), loads list[(E,)]"""
     B, T = idx.shape
@@ -177,7 +214,7 @@ def forward(p, idx, cfg):
         x = x + attention(blk["attn"], layer_norm(x, **blk["ln1"]), cfg["n_head"])
         h = layer_norm(x, **blk["ln2"])
         if "moe" in blk:
-            y, aux, f = moe_ffn(blk["moe"], h, cfg["top_k"], cfg.get("gate_grad", "renorm"))
+            y, aux, f = moe_ffn(blk["moe"], h, cfg["top_k"], cfg.get("gate_grad", "renorm"), cfg.get("bias_on", "logits"))
             aux_total = aux_total + aux
             loads.append(f)
         else:

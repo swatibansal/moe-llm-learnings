@@ -19,7 +19,7 @@ def load(run):
     cfg = json.load(open(os.path.join(root, run, "config.json")))
     c = cfg["cfg"]
     return {"run": run, "E": c.get("n_experts", 1), "k": c.get("top_k", 1), "gate": c.get("gate_grad", "renorm"),
-            "aux_coef": c.get("aux_coef", 0.01), "router_std": c.get("router_std", 1e-3),
+            "aux_coef": c.get("aux_coef", 0.01), "router_std": c.get("router_std", 1e-3), "bias_gamma": c.get("bias_gamma", 0.0),
             "total": cfg["params_total"], "active": cfg["params_active"],
             "step0": float(rows[0]["val_loss"]), "step": int(rows[-1]["step"]), "val": float(rows[-1]["val_loss"]),
             "aux": float(rows[-1]["aux_loss"] or 0), "done": os.path.exists(os.path.join(root, run, "DONE"))}
@@ -51,6 +51,7 @@ if fin:
         if r["run"] != "dense_cont":  # router-ablation arms: mark the non-default knob
             if r["aux_coef"] != 0.01: lab += f" aux={r['aux_coef']:g}"
             if r["router_std"] != 1e-3: lab += f" std={r['router_std']:g}"
+            if r["bias_gamma"]: lab += f" bias={r['bias_gamma']:g}"
         ax.scatter(r["active"] / 1e6, r["val"], s=60, marker="^" if sg else "o",
                    color="tab:blue" if r["run"] == "dense_cont" else ("tab:green" if sg else "tab:red"))
         ax.annotate(lab, (r["active"] / 1e6, r["val"]), textcoords="offset points", xytext=(6, 4), fontsize=8)

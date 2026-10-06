@@ -23,7 +23,11 @@ dense); a stronger balancing loss (0.1) or a larger router init (1e-2) each beat
 best run of the project: **1.4976** at step 3500 (E=8, top-2, 4.52M total / 1.36M active) vs 1.5390 dense.
 Over 3 paired seeds the gap is **−0.040 ± 0.0015** nats/char (`run_seeds.sh`, `seeds_report.py`).
 
-Full narrative of the findings, including the two negative results: [`RESULTS.md`](RESULTS.md).
+Aux-loss-free balancing (DeepSeek-V3-style selection bias, `--bias-gamma`, `run_bias*.sh`): matches the auxiliary loss
+(1.501–1.502 vs 1.4976–1.5007) once the bias acts on bounded scores or with a large enough step; on raw logits at the
+paper's step size it loses a race against router confidence and collapse persists.
+
+Full narrative of the findings, including the negative results: [`RESULTS.md`](RESULTS.md).
 
 ## The idea in three lines
 
